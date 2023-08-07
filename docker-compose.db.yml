@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  sale-cars:
+    image: postgis/postgis
+    ports:
+      - '${POSTGRES_EXTERNAL_PORT:-5432}:5432'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: sale-cars
+    volumes:
+      - sale-cars-db:/var/lib/postgresql/sale-cars
+
+volumes:
+  sale-cars-db:
