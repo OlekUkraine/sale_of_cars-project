@@ -1,0 +1,29 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { CreatePostDto } from './dto/create-post.dto';
+import { PostsService } from './posts.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+
+@Controller('posts')
+export class PostsController {
+  constructor(private postService: PostsService) {}
+
+  @Post()
+  @UseInterceptors(FileInterceptor('images'))
+  createPost(@Body() dto: CreatePostDto, @UploadedFile() image: any) {
+    return this.postService.create(dto, image);
+  }
+
+  @Delete('/delete/:postId')
+  // @UseInterceptors(FileInterceptor('images'))
+  deletePost(@Param('postId') postId: number) {
+    return this.postService.delete(postId);
+  }
+}

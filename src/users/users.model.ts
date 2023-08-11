@@ -2,16 +2,18 @@ import {
   BelongsToMany,
   Column,
   DataType,
+  HasMany,
   Model,
   Table,
 } from 'sequelize-typescript';
-import { UserCreationAttrs } from './interface/user.interface';
+import { IUserCreation } from './interfaces/user.interface';
 import { ApiProperty } from '@nestjs/swagger';
-import { Role } from '../roles/role.model';
+import { Role } from '../roles/roles.model';
 import { UserRole } from '../roles/user-roles.model';
+import { Post } from '../posts/posts.model';
 
 @Table({ tableName: 'users' })
-export class User extends Model<User, UserCreationAttrs> {
+export class User extends Model<User, IUserCreation> {
   @ApiProperty({ description: 'User`s id' })
   @Column({
     type: DataType.INTEGER,
@@ -21,7 +23,7 @@ export class User extends Model<User, UserCreationAttrs> {
   })
   id: number;
 
-  @ApiProperty({ example: 'XXXX@XXX.XXX', description: 'User`s email' })
+  @ApiProperty({ description: 'User`s email' })
   @Column({
     type: DataType.STRING,
     unique: true,
@@ -35,6 +37,13 @@ export class User extends Model<User, UserCreationAttrs> {
     allowNull: false,
   })
   password: string;
+
+  @ApiProperty({ description: 'Whether the user has a premium subscription' })
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+  })
+  premium: boolean;
 
   @ApiProperty({ description: 'User banned or not' })
   @Column({
@@ -52,4 +61,7 @@ export class User extends Model<User, UserCreationAttrs> {
 
   @BelongsToMany(() => Role, () => UserRole)
   roles: Role[];
+
+  @HasMany(() => Post)
+  posts: Post[];
 }

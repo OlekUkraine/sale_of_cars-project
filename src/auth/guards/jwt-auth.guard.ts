@@ -17,8 +17,6 @@ export class JwtAuthGuard implements CanActivate {
     try {
       const authHeader = req.headers.authorization;
       const [bearer, token] = authHeader.split(' ');
-      console.log('bearer ==========', bearer);
-      console.log('token ==========', token);
 
       if (bearer !== 'Bearer' || !token) {
         throw new UnauthorizedException({
@@ -27,6 +25,13 @@ export class JwtAuthGuard implements CanActivate {
       }
 
       const user = this.jwtService.verify(token);
+
+      if (user.email !== req.body.email) {
+        throw new UnauthorizedException({
+          message: 'The user is not authorized',
+        });
+      }
+
       req.user = user;
       return true;
     } catch (e) {

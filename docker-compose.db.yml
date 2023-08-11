@@ -1,16 +1,23 @@
 version: '3.9'
 
 services:
-  sale-cars:
+  sale_cars:
     image: postgis/postgis
     ports:
       - '${POSTGRES_EXTERNAL_PORT:-5432}:5432'
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: sale-cars
+      POSTGRES_DB: sale_cars
     volumes:
-      - sale-cars-db:/var/lib/postgresql/sale-cars
+      - sale_cars_db:/var/lib/postgresql/sale_cars
+
+#  redis:
+#    image: redis:alpine3.14
+#    container_name: redis_sale-cars
+#    ports:
+#      - '6379:6379'
 
 volumes:
-  sale-cars-db:
+  sale_cars_db:
+#  redis:

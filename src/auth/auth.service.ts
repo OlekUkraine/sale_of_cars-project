@@ -5,26 +5,30 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { UserService } from '../users/user.service';
+import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
-import { User } from '../users/user.model';
+import { User } from '../users/users.model';
+import { RolesService } from '../roles/roles.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
+    private userService: UsersService,
+    private roleService: RolesService,
     private jwtService: JwtService,
   ) {}
 
   async registration(userDto: CreateUserDto) {
     const candidate = await this.userService.getUserByEmail(userDto.email);
+
     if (candidate) {
       throw new HttpException(
         'User with this email already exists',
         HttpStatus.BAD_REQUEST,
       );
     }
+
     const hashPassword = await bcrypt.hash(userDto.password, 5);
     const user = await this.userService.createUser({
       ...userDto,
