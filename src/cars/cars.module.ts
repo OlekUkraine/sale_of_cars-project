@@ -4,9 +4,11 @@ import { CarsService } from './cars.service';
 import { User } from '../users/users.model';
 import { Car } from './cars.model';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { RolesModule } from '../roles/roles.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Car, User])],
+  imports: [JwtModule, RolesModule, SequelizeModule.forFeature([Car, User])],
   controllers: [CarsController],
   providers: [CarsService],
 })

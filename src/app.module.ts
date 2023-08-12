@@ -9,7 +9,7 @@ import { UserRole } from './roles/user-roles.model';
 import { AuthModule } from './auth/auth.module';
 import { PostsModule } from './posts/posts.module';
 import * as process from 'process';
-import { Post } from './posts/posts.model';
+import { MPost } from './posts/posts.model';
 import { FilesModule } from './files/files.module';
 import { CarsModule } from './cars/cars.module';
 import { Car } from './cars/cars.model';
@@ -28,7 +28,7 @@ import { Car } from './cars/cars.model';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Role, UserRole, Post, Car],
+      models: [User, Role, UserRole, MPost, Car],
       autoLoadModels: true,
       synchronize: true,
     }),

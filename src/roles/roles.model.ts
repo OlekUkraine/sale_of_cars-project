@@ -9,6 +9,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { RoleCreationAttrs } from './interfaces/role.interface';
 import { User } from '../users/users.model';
 import { UserRole } from './user-roles.model';
+import { ERoles } from './enums/roles.enum';
+import { IsEnum } from 'class-validator';
 
 @Table({ tableName: 'roles' })
 export class Role extends Model<Role, RoleCreationAttrs> {
@@ -22,15 +24,19 @@ export class Role extends Model<Role, RoleCreationAttrs> {
   id: number;
 
   @ApiProperty({
-    example: 'Buyer or Seller or Manager or Administrator',
+    example: 'One of these options is allowed [ADMIN, MANAGER, SELLER, USER]',
     description: 'User`s role',
   })
   @Column({
-    type: DataType.STRING,
+    type: DataType.ENUM,
     unique: true,
     allowNull: false,
+    values: Object.values(ERoles),
   })
-  value: string;
+  @IsEnum(ERoles, {
+    message: 'Invalid role. Available roles: ADMIN, MANAGER, SELLER, USER',
+  })
+  value: ERoles;
 
   @ApiProperty({ description: 'Description user`s role' })
   @Column({

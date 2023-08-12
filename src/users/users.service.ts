@@ -5,6 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { RolesService } from '../roles/roles.service';
 import { AddRoleDto } from '../roles/dto/add-role.dto';
 import { BanUserDto } from './dto/ban-user.dto';
+import { ERoles } from '../roles/enums/roles.enum';
 
 @Injectable()
 export class UsersService {
@@ -19,7 +20,7 @@ export class UsersService {
 
     if (!existAnyRoles.length) {
       const role = await this.roleService.createRole({
-        value: 'ADMIN',
+        value: ERoles.ADMIN,
         description: 'Administrator',
       });
       await user.$set('roles', [role.id]);
@@ -29,14 +30,14 @@ export class UsersService {
 
     if (existAnyRoles.length) {
       try {
-        const role = await this.roleService.getRoleByValue('USER');
+        const role = await this.roleService.getRoleByValue(ERoles.USER);
         if (role) {
           await user.$set('roles', [role.id]);
 
           return user;
         } else {
           const role = await this.roleService.createRole({
-            value: 'USER',
+            value: ERoles.USER,
             description: 'User',
           });
           await user.$set('roles', [role.id]);
@@ -59,6 +60,10 @@ export class UsersService {
       where: { email },
       include: { all: true },
     });
+  }
+
+  async getById(id: number) {
+    return await this.userRepository.findByPk(id);
   }
 
   async addRole(dto: AddRoleDto) {

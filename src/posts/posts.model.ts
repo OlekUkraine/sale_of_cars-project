@@ -11,7 +11,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { User } from '../users/users.model';
 
 @Table({ tableName: 'posts' })
-export class Post extends Model<Post, IPostCreation> {
+export class MPost extends Model<MPost, IPostCreation> {
   @ApiProperty({ description: 'Post`s id' })
   @Column({
     type: DataType.INTEGER,

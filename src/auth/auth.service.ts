@@ -10,16 +10,19 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { User } from '../users/users.model';
 import { RolesService } from '../roles/roles.service';
+import { IJWTPayload } from './interfaces/jwt.auth.interface';
+import { IToken } from './interfaces/token.interface';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UsersService,
-    private roleService: RolesService,
+    // private roleService: RolesService,
     private jwtService: JwtService,
   ) {}
 
-  async registration(userDto: CreateUserDto) {
+  async registration(userDto: CreateUserDto): Promise<IToken> {
     const candidate = await this.userService.getUserByEmail(userDto.email);
 
     if (candidate) {
@@ -38,27 +41,38 @@ export class AuthService {
     return this.generateToken(user);
   }
 
-  async login(userDto: CreateUserDto) {
+  async login(userDto: LoginUserDto): Promise<IToken> {
     const user = await this.validateUser(userDto);
     return this.generateToken(user);
   }
 
-  private async generateToken(user: User) {
+  async verify(token: string): Promise<IJWTPayload> {
+    try {
+      return await this.jwtService.verifyAsync(token);
+    } catch (e) {
+      console.log(new Date().toISOString(), token);
+      throw new UnauthorizedException();
+    }
+  }
+
+  private async generateToken(user: User): Promise<IToken> {
     const payload = { email: user.email, id: user.id, roles: user.roles };
     return {
       token: this.jwtService.sign(payload),
     };
   }
 
-  private async validateUser(userDto: CreateUserDto) {
-    const user = (await this.userService.getUserByEmail(userDto.email)) as User;
+  private async validateUser(userDto: LoginUserDto): Promise<User> {
+    const user = await this.userService.getUserByEmail(userDto.email);
     const passwordEquals = await bcrypt.compare(
       userDto.password,
       user.password,
     );
-    if (user && passwordEquals) {
-      return user;
+
+    if (!user && !passwordEquals) {
+      throw new UnauthorizedException({ message: 'Wrong email or password' });
     }
-    throw new UnauthorizedException({ message: 'Wrong email or password' });
+
+    return user;
   }
 }

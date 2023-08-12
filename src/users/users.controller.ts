@@ -15,6 +15,7 @@ import { Roles } from '../auth/decorators/roles-auth.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { AddRoleDto } from '../roles/dto/add-role.dto';
 import { BanUserDto } from './dto/ban-user.dto';
+import { ERoles } from '../roles/enums/roles.enum';
 // import { ValidationPipe } from "../pipes/validation.pipe";
 
 @ApiTags('users')
@@ -32,7 +33,7 @@ export class UsersController {
 
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, type: [User] })
-  // @Roles('ADMIN')
+  @Roles(ERoles.ADMIN, ERoles.MANAGER)
   @UseGuards(RolesGuard)
   @Get()
   getAllUsers() {
@@ -41,7 +42,7 @@ export class UsersController {
 
   @ApiOperation({ summary: 'Distribution of roles' })
   @ApiResponse({ status: 200 })
-  @Roles('ADMIN')
+  @Roles(ERoles.ADMIN)
   @UseGuards(RolesGuard)
   @Post('/role')
   addRole(@Body() dto: AddRoleDto) {
@@ -50,7 +51,7 @@ export class UsersController {
 
   @ApiOperation({ summary: 'Banned users' })
   @ApiResponse({ status: 200 })
-  @Roles('ADMIN, MANAGER')
+  @Roles(ERoles.ADMIN, ERoles.MANAGER)
   @UseGuards(RolesGuard)
   @Post('/ban')
   ban(@Body() dto: BanUserDto) {
@@ -58,8 +59,8 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: 'Get all users' })
-  @ApiResponse({ status: 200, type: [User] })
-  // @Roles('ADMIN')
+  @ApiResponse({ status: 200 })
+  @Roles(ERoles.ADMIN, ERoles.MANAGER)
   @UseGuards(RolesGuard)
   @Delete('delete/:userId')
   delete(@Param('userId') userId: number) {

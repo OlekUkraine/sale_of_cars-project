@@ -10,11 +10,11 @@ import { IUserCreation } from './interfaces/user.interface';
 import { ApiProperty } from '@nestjs/swagger';
 import { Role } from '../roles/roles.model';
 import { UserRole } from '../roles/user-roles.model';
-import { Post } from '../posts/posts.model';
+import { MPost } from '../posts/posts.model';
 
 @Table({ tableName: 'users' })
 export class User extends Model<User, IUserCreation> {
-  @ApiProperty({ description: 'User`s id' })
+  @ApiProperty({ description: 'The user`s id' })
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -23,7 +23,7 @@ export class User extends Model<User, IUserCreation> {
   })
   id: number;
 
-  @ApiProperty({ description: 'User`s email' })
+  @ApiProperty({ description: 'The user`s email' })
   @Column({
     type: DataType.STRING,
     unique: true,
@@ -31,7 +31,15 @@ export class User extends Model<User, IUserCreation> {
   })
   email: string;
 
-  @ApiProperty({ description: 'User`s password' })
+  @ApiProperty({ description: 'The user`s phone number' })
+  @Column({
+    type: DataType.STRING,
+    unique: true,
+    allowNull: true,
+  })
+  phoneNumber: string;
+
+  @ApiProperty({ description: 'The user`s password' })
   @Column({
     type: DataType.STRING,
     allowNull: false,
@@ -62,6 +70,6 @@ export class User extends Model<User, IUserCreation> {
   @BelongsToMany(() => Role, () => UserRole)
   roles: Role[];
 
-  @HasMany(() => Post)
-  posts: Post[];
+  @HasMany(() => MPost)
+  posts: MPost[];
 }

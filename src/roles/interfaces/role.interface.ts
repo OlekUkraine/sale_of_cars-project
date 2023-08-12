@@ -1,4 +1,6 @@
+import { ERoles } from '../enums/roles.enum';
+
 export interface RoleCreationAttrs {
-  value: string;
+  value: ERoles;
   description: string;
 }

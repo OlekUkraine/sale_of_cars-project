@@ -3,7 +3,7 @@ import { IsNumber, IsString } from 'class-validator';
 
 export class CreateCarDto {
   @ApiProperty({ description: 'Car seller id' })
-  @IsNumber({}, { message: 'most be number' })
+  @IsString({ message: 'most be number' })
   readonly userId: number;
 
   @ApiProperty({ description: 'Car brand' })
