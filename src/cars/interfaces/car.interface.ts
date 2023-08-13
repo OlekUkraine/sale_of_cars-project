@@ -1,8 +1,9 @@
 export interface ICarCreation {
+  id: number;
   userId: number;
   brand: string;
   model: string;
-  age: number;
+  year: number;
   image: string;
   description: string;
 }

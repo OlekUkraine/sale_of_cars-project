@@ -13,9 +13,8 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './users.model';
 import { Roles } from '../auth/decorators/roles-auth.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
-import { AddRoleDto } from '../roles/dto/add-role.dto';
+import { AddRoleDto } from './dto/add-role.dto';
 import { BanUserDto } from './dto/ban-user.dto';
-import { ERoles } from '../roles/enums/roles.enum';
 // import { ValidationPipe } from "../pipes/validation.pipe";
 
 @ApiTags('users')
@@ -27,43 +26,43 @@ export class UsersController {
   @ApiResponse({ status: 200, type: User })
   // @UsePipes(ValidationPipe)
   @Post()
-  create(@Body() userDto: CreateUserDto) {
+  async create(@Body() userDto: CreateUserDto) {
     return this.userService.createUser(userDto);
   }
 
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, type: [User] })
-  @Roles(ERoles.ADMIN, ERoles.MANAGER)
+  @Roles('admin', 'manager')
   @UseGuards(RolesGuard)
   @Get()
-  getAllUsers() {
+  async getAllUsers() {
     return this.userService.getAllUsers();
   }
 
   @ApiOperation({ summary: 'Distribution of roles' })
   @ApiResponse({ status: 200 })
-  @Roles(ERoles.ADMIN)
+  @Roles('admin')
   @UseGuards(RolesGuard)
-  @Post('/role')
-  addRole(@Body() dto: AddRoleDto) {
+  @Post('/add_role')
+  async addRole(@Body() dto: AddRoleDto) {
     return this.userService.addRole(dto);
   }
 
   @ApiOperation({ summary: 'Banned users' })
   @ApiResponse({ status: 200 })
-  @Roles(ERoles.ADMIN, ERoles.MANAGER)
+  @Roles('admin', 'manager')
   @UseGuards(RolesGuard)
   @Post('/ban')
-  ban(@Body() dto: BanUserDto) {
+  async ban(@Body() dto: BanUserDto) {
     return this.userService.ban(dto);
   }
 
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200 })
-  @Roles(ERoles.ADMIN, ERoles.MANAGER)
+  @Roles('admin', 'MANAGER')
   @UseGuards(RolesGuard)
   @Delete('delete/:userId')
-  delete(@Param('userId') userId: number) {
+  async delete(@Param('userId') userId: number) {
     console.log(userId);
     return this.userService.delete(userId);
   }

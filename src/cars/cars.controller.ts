@@ -2,9 +2,12 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   Patch,
   Post,
+  Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { CarsService } from './cars.service';
@@ -13,6 +16,8 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles-auth.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Car } from './cars.model';
+import { User } from '../users/users.model';
+import { PublicCarDto } from '../common/query/cars.query.dto';
 
 @ApiTags('cars')
 @Controller('cars')
@@ -21,28 +26,34 @@ export class CarsController {
 
   @ApiOperation({ summary: 'Create new car' })
   @ApiResponse({ status: 200, type: Car })
-  @Roles('SELLER')
+  @Roles('seller', 'admin')
   @UseGuards(RolesGuard)
   @Post('/create')
-  createCar(@Body() dto: CreateCarDto) {
+  async createCar(@Body() dto: CreateCarDto, @Req() req: { user: User }) {
+    dto.userId = req.user.id;
     return this.carsService.create(dto);
+  }
+
+  @Get()
+  async getCarsList(@Query() query: PublicCarDto) {
+    return this.carsService.findAllCarsWithFilters(query);
   }
 
   @ApiOperation({ summary: 'Update car' })
   @ApiResponse({ status: 200, type: Car })
-  @Roles('SELLER')
+  @Roles('seller', 'admin')
   @UseGuards(RolesGuard)
   @Patch()
-  updateCar(@Body() dto: CreateCarDto) {
+  async updateCar(@Body() dto: CreateCarDto) {
     return this.carsService.update(dto);
   }
 
   @ApiOperation({ summary: 'Delete car by id' })
   @ApiResponse({ status: 200 })
-  @Roles('SELLER')
+  @Roles('seller', 'admin', 'manager')
   @UseGuards(RolesGuard)
   @Delete('/delete/:carId')
-  deleteCar(@Param('carId') carId: number) {
+  async deleteCar(@Param('carId') carId: number) {
     return this.carsService.delete(carId);
   }
 }

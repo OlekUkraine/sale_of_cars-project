@@ -1,4 +1,9 @@
-import { forwardRef, Module } from '@nestjs/common';
+import {
+  forwardRef,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
@@ -10,6 +15,8 @@ import { User } from '../users/users.model';
 import { BearerStrategy } from './bearer.strategy';
 import { Role } from '../roles/roles.model';
 import { UserRole } from '../roles/user-roles.model';
+import { CarsModule } from '../cars/cars.module';
+import { AttachUserMiddleware } from './middleware/attach-user.middleware';
 
 @Module({
   controllers: [AuthController],
@@ -20,7 +27,8 @@ import { UserRole } from '../roles/user-roles.model';
       property: 'user',
       session: false,
     }),
-    RolesModule,
+    forwardRef(() => CarsModule),
+    forwardRef(() => RolesModule),
     forwardRef(() => UsersModule),
     SequelizeModule.forFeature([User, Role, UserRole]),
     JwtModule.registerAsync({

@@ -1,6 +1,6 @@
 export enum ERoles {
-  ADMIN = 'ADMIN',
-  MANAGER = 'MANAGER',
-  SELLER = 'SELLER',
-  USER = 'USER',
+  ADMIN = 'admin',
+  MANAGER = 'manager',
+  SELLER = 'seller',
+  USER = 'user',
 }

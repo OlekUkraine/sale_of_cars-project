@@ -1,5 +1,5 @@
 import { IsEnum, IsNumber, IsString } from 'class-validator';
-import { ERoles } from '../enums/roles.enum';
+import { ERoles } from '../../roles/enums/roles.enum';
 
 export class AddRoleDto {
   @IsString({ message: 'most be string' })

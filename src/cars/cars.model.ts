@@ -40,7 +40,7 @@ export class Car extends Model<Car, ICarCreation> {
     type: DataType.INTEGER,
     allowNull: false,
   })
-  age: number;
+  year: number;
 
   @ApiProperty({ description: 'Image of the car' })
   @Column({ type: DataType.STRING })

@@ -40,10 +40,10 @@ export class MPost extends Model<MPost, IPostCreation> {
   @Column({ type: DataType.STRING })
   image: string;
 
-  @ForeignKey(() => User)
-  @Column({ type: DataType.INTEGER })
-  userId: number;
-
-  @BelongsTo(() => User)
-  seller: User;
+  // @ForeignKey(() => User)
+  // @Column({ type: DataType.INTEGER })
+  // userId: number;
+  //
+  // @BelongsTo(() => User)
+  // seller: User;
 }

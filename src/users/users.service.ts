@@ -3,7 +3,7 @@ import { User } from './users.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto } from './dto/create-user.dto';
 import { RolesService } from '../roles/roles.service';
-import { AddRoleDto } from '../roles/dto/add-role.dto';
+import { AddRoleDto } from './dto/add-role.dto';
 import { BanUserDto } from './dto/ban-user.dto';
 import { ERoles } from '../roles/enums/roles.enum';
 
@@ -66,7 +66,7 @@ export class UsersService {
     return await this.userRepository.findByPk(id);
   }
 
-  async addRole(dto: AddRoleDto) {
+  async addRole(dto: AddRoleDto): Promise<AddRoleDto> {
     const user = await this.userRepository.findByPk(dto.userId);
     const role = await this.roleService.getRoleByValue(dto.value);
 
@@ -85,9 +85,14 @@ export class UsersService {
       throw new HttpException('User is not found', HttpStatus.NOT_FOUND);
     }
 
-    user.banned = true;
-    user.banReason = dto.banReason;
+    if (dto.toBan && user.banned) {
+      throw new HttpException('The user already has ban', HttpStatus.CONFLICT);
+    }
+
+    user.banReason = dto.toBan ? dto.banReason : '';
+    user.banned = dto.toBan;
     await user.save();
+
     return user;
   }
 

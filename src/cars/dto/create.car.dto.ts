@@ -4,7 +4,7 @@ import { IsNumber, IsString } from 'class-validator';
 export class CreateCarDto {
   @ApiProperty({ description: 'Car seller id' })
   @IsString({ message: 'most be number' })
-  readonly userId: number;
+  userId: number;
 
   @ApiProperty({ description: 'Car brand' })
   @IsString({ message: 'most be string' })
@@ -16,7 +16,7 @@ export class CreateCarDto {
 
   @ApiProperty({ description: 'What year of production is the car' })
   @IsNumber({}, { message: 'most be number' })
-  readonly age: number;
+  readonly year: number;
 
   @ApiProperty({ description: 'Photo of the car' })
   @IsString({ message: 'most be string' })

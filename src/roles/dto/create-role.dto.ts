@@ -4,7 +4,9 @@ import { ERoles } from '../enums/roles.enum';
 
 export class CreateRoleDto {
   @ApiProperty({ description: 'User role on this resource' })
-  @IsEnum(ERoles)
+  @IsEnum(ERoles, {
+    message: 'Invalid role. Available roles: admin, manager, seller, user',
+  })
   @IsString({ message: 'most be string' })
   readonly value: ERoles;
 

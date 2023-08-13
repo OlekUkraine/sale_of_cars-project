@@ -10,7 +10,7 @@ import { IUserCreation } from './interfaces/user.interface';
 import { ApiProperty } from '@nestjs/swagger';
 import { Role } from '../roles/roles.model';
 import { UserRole } from '../roles/user-roles.model';
-import { MPost } from '../posts/posts.model';
+import { Car } from '../cars/cars.model';
 
 @Table({ tableName: 'users' })
 export class User extends Model<User, IUserCreation> {
@@ -70,6 +70,9 @@ export class User extends Model<User, IUserCreation> {
   @BelongsToMany(() => Role, () => UserRole)
   roles: Role[];
 
-  @HasMany(() => MPost)
-  posts: MPost[];
+  // @HasMany(() => MPost)
+  // posts: MPost[];
+
+  // @HasMany(() => Car)
+  // cars: Car[];
 }
