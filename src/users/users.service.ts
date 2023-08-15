@@ -1,20 +1,26 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from './users.model';
-import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto } from './dto/create-user.dto';
 import { RolesService } from '../roles/roles.service';
 import { AddRoleDto } from './dto/add-role.dto';
 import { BanUserDto } from './dto/ban-user.dto';
 import { ERoles } from '../enums/roles.enum';
+import { InjectModel } from '@nestjs/sequelize';
+import { Op } from 'sequelize';
+import { PaginationService } from '../pagination/pagination.service';
+import { PaginatedDto } from '../common/pagination/response';
+import { PublicQueryDto } from '../common/query/query.dto';
+import { PublicUserDto } from './dto/public.user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User) private userRepository: typeof User,
-    private roleService: RolesService,
+    private readonly roleService: RolesService,
+    private readonly paginationService: PaginationService,
   ) {}
 
-  async createUser(dto: CreateUserDto) {
+  async createUser(dto: CreateUserDto): Promise<User> {
     const user = await this.userRepository.create(dto);
     const existAnyRoles = await this.roleService.getAllRoles();
 
@@ -51,11 +57,34 @@ export class UsersService {
     return user;
   }
 
-  async getAllUsers() {
-    return await this.userRepository.findAll({ include: { all: true } });
+  async findAllUsersWithFilters(
+    query: PublicQueryDto,
+  ): Promise<PaginatedDto<PublicUserDto>> {
+    const options = {
+      page: query.page || '1',
+      limit: query.limit || '5',
+      sortField: query.sort || 'id',
+      sortOrder: query.order || 'ASC',
+    };
+    const where = {};
+
+    if (query.search) {
+      where['brand'] = { [Op.in]: query.search.split(',') };
+    }
+
+    try {
+      const foundUsers = await this.userRepository.findAll({
+        where,
+        order: [[options.sortField, options.sortOrder]],
+      });
+
+      return await this.paginationService.paginate(foundUsers, options);
+    } catch (e) {
+      throw new HttpException('your query is bad', HttpStatus.BAD_REQUEST);
+    }
   }
 
-  async getUserByEmail(email: string) {
+  async getUserByEmail(email: string): Promise<User> {
     return await this.userRepository.findOne({
       where: { email },
       include: { all: true },
@@ -78,7 +107,7 @@ export class UsersService {
     throw new HttpException('User or role not found', HttpStatus.NOT_FOUND);
   }
 
-  async ban(dto: BanUserDto) {
+  async ban(dto: BanUserDto): Promise<User> {
     const user = await this.userRepository.findByPk(dto.userId);
 
     if (!user) {

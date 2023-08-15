@@ -7,16 +7,17 @@ import { Role } from '../roles/roles.model';
 import { UserRole } from '../roles/user-roles.model';
 import { RolesModule } from '../roles/roles.module';
 import { AuthModule } from '../auth/auth.module';
-import { MPost } from '../posts/posts.model';
 import { Car } from '../cars/cars.model';
 import { CarsModule } from '../cars/cars.module';
+import { PaginationModule } from '../pagination/pagination.module';
 
 @Module({
   imports: [
     forwardRef(() => AuthModule),
     forwardRef(() => CarsModule),
-    SequelizeModule.forFeature([User, Role, UserRole, MPost, Car]),
     forwardRef(() => RolesModule),
+    forwardRef(() => PaginationModule),
+    SequelizeModule.forFeature([User, Role, UserRole, Car]),
   ],
   controllers: [UsersController],
   providers: [UsersService],

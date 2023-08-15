@@ -9,12 +9,14 @@ import { AuthModule } from '../auth/auth.module';
 import { UsersModule } from '../users/users.module';
 import { CurrencyModule } from '../currency/currency.module';
 import { JwtModule } from '@nestjs/jwt';
+import { PaginationModule } from '../pagination/pagination.module';
 
 @Module({
   imports: [
     forwardRef(() => CurrencyModule),
     forwardRef(() => AuthModule),
     forwardRef(() => UsersModule),
+    forwardRef(() => PaginationModule),
     SequelizeModule.forFeature([Car, User]),
     FilesModule,
     JwtModule,

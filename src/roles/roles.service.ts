@@ -29,7 +29,6 @@ export class RolesService {
   }
 
   async getRoleByValue(value: string): Promise<Role> {
-    console.log(value);
     return await this.roleRepository.findOne({ where: { value } });
   }
 

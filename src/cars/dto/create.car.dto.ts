@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsString } from 'class-validator';
 
 export class CreateCarDto {
-  @ApiProperty({ description: 'Car seller id' })
   @IsString({ message: 'most be number' })
   userId: number;
 

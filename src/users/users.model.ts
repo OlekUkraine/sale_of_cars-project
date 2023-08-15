@@ -2,18 +2,16 @@ import {
   BelongsToMany,
   Column,
   DataType,
-  HasMany,
   Model,
   Table,
 } from 'sequelize-typescript';
-import { IUserCreation } from './interfaces/user.interface';
+import { IUserInformation } from './interfaces/user.interface';
 import { ApiProperty } from '@nestjs/swagger';
 import { Role } from '../roles/roles.model';
 import { UserRole } from '../roles/user-roles.model';
-import { Car } from '../cars/cars.model';
 
 @Table({ tableName: 'users' })
-export class User extends Model<User, IUserCreation> {
+export class User extends Model<User, IUserInformation> {
   @ApiProperty({ description: 'The user`s id' })
   @Column({
     type: DataType.INTEGER,
@@ -69,10 +67,4 @@ export class User extends Model<User, IUserCreation> {
 
   @BelongsToMany(() => Role, () => UserRole)
   roles: Role[];
-
-  // @HasMany(() => MPost)
-  // posts: MPost[];
-
-  // @HasMany(() => Car)
-  // cars: Car[];
 }

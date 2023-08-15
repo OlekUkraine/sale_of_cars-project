@@ -1,8 +1,15 @@
-export class FindCarDto {
-  readonly brand: string;
-  readonly model: string;
-  readonly year: number;
-  readonly image: string;
-  readonly description: string;
-  price: string;
+import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional, IsString } from 'class-validator';
+import { CreateCarDto } from './create.car.dto';
+
+export class FindCarDto extends CreateCarDto {
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  readonly sellerEmail: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  readonly sellerPhone: string;
 }

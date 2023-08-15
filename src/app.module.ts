@@ -7,15 +7,14 @@ import { RolesModule } from './roles/roles.module';
 import { Role } from './roles/roles.model';
 import { UserRole } from './roles/user-roles.model';
 import { AuthModule } from './auth/auth.module';
-import { PostsModule } from './posts/posts.module';
 import * as process from 'process';
-import { MPost } from './posts/posts.model';
 import { FilesModule } from './files/files.module';
 import { CarsModule } from './cars/cars.module';
 import { Car } from './cars/cars.model';
 import { CurrencyModule } from './currency/currency.module';
 import { HttpModule } from '@nestjs/axios';
 import { Currency } from './currency/currency.model';
+import { PaginationModule } from './pagination/pagination.module';
 
 @Module({
   controllers: [],
@@ -31,17 +30,17 @@ import { Currency } from './currency/currency.model';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Role, UserRole, MPost, Car, Currency],
+      models: [User, Role, UserRole, Car, Currency],
       autoLoadModels: true,
       synchronize: true,
     }),
     UsersModule,
     RolesModule,
     AuthModule,
-    PostsModule,
     FilesModule,
     CarsModule,
     CurrencyModule,
+    PaginationModule,
   ],
 })
 export class AppModule {}

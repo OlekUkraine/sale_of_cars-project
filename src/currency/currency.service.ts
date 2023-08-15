@@ -28,6 +28,14 @@ export class CurrencyService {
     return dto.price;
   }
 
+  async getCurrencySale(currency: string) {
+    const currentExchangeRate = await this.currencyRepository.findOne({
+      where: { ccy: currency },
+    });
+
+    return currentExchangeRate.sale;
+  }
+
   async getAndCreateExchangeRate(): Promise<any> {
     const { data } = await this.getExchangeRate();
 

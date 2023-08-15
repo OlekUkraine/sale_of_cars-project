@@ -8,11 +8,11 @@ import {
 } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from '../users/users.model';
-import { ICarCreation } from './interfaces/car.interface';
+import { ICarPublicInfo } from './interfaces/car.interface';
 import { IsString } from 'class-validator';
 
 @Table({ tableName: 'cars' })
-export class Car extends Model<Car, ICarCreation> {
+export class Car extends Model<Car, ICarPublicInfo> {
   @ApiProperty({ description: 'Car`s id' })
   @Column({
     type: DataType.INTEGER,
@@ -58,10 +58,11 @@ export class Car extends Model<Car, ICarCreation> {
   })
   price: string;
 
-  @ApiProperty({ description: 'Currency most be UAH, USD or EUR' })
+  // @ApiProperty({ description: 'Currency most be UAH, USD or EUR' })
   @Column({ type: DataType.STRING })
-  readonly currency: string;
+  currency: string;
 
+  @ApiProperty({ description: 'ID of the car owner' })
   @ForeignKey(() => User)
   @Column({ type: DataType.INTEGER })
   userId: number;
