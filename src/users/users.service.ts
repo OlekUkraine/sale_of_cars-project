@@ -5,7 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { RolesService } from '../roles/roles.service';
 import { AddRoleDto } from './dto/add-role.dto';
 import { BanUserDto } from './dto/ban-user.dto';
-import { ERoles } from '../roles/enums/roles.enum';
+import { ERoles } from '../enums/roles.enum';
 
 @Injectable()
 export class UsersService {

@@ -5,16 +5,30 @@ import { PublicCarDto } from '../common/query/cars.query.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'sequelize-typescript';
 import { AuthService } from '../auth/auth.service';
+import { CurrencyService } from '../currency/currency.service';
+import { ECurrency } from '../enums/currency.enum';
+import { User } from '../users/users.model';
 
 @Injectable()
 export class CarsService {
   constructor(
     @InjectRepository(Car) private readonly carRepository: Repository<Car>,
     private readonly authService: AuthService,
+    private readonly currencyService: CurrencyService,
   ) {}
 
-  async create(dto: CreateCarDto): Promise<Car> {
-    return await this.carRepository.create(dto);
+  async addSaleCar(dto: CreateCarDto, req: any): Promise<Car> {
+    const newPrice = await this.currencyService.transferredAmount({
+      price: dto.price,
+      currency: dto.currency,
+    });
+
+    return await this.create({
+      ...dto,
+      price: newPrice,
+      currency: ECurrency.UAH,
+      userId: req.user.id,
+    });
   }
 
   async findAllCarsWithFilters(query: PublicCarDto) {
@@ -39,5 +53,9 @@ export class CarsService {
   async delete(carId: number) {
     const carToDelete = await this.carRepository.findByPk(carId);
     return carToDelete.destroy();
+  }
+
+  private async create(dto: CreateCarDto): Promise<Car> {
+    return await this.carRepository.create(dto);
   }
 }

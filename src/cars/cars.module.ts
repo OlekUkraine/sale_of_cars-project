@@ -7,13 +7,17 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { FilesModule } from '../files/files.module';
 import { AuthModule } from '../auth/auth.module';
 import { UsersModule } from '../users/users.module';
+import { CurrencyModule } from '../currency/currency.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
+    forwardRef(() => CurrencyModule),
     forwardRef(() => AuthModule),
     forwardRef(() => UsersModule),
     SequelizeModule.forFeature([Car, User]),
     FilesModule,
+    JwtModule,
   ],
   controllers: [CarsController],
   providers: [CarsService],

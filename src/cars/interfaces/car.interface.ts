@@ -4,6 +4,7 @@ export interface ICarCreation {
   brand: string;
   model: string;
   year: number;
+  price: string;
   image: string;
   description: string;
 }

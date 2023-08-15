@@ -18,20 +18,23 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Car } from './cars.model';
 import { User } from '../users/users.model';
 import { PublicCarDto } from '../common/query/cars.query.dto';
+import { UsersService } from '../users/users.service';
 
 @ApiTags('cars')
 @Controller('cars')
 export class CarsController {
-  constructor(private readonly carsService: CarsService) {}
+  constructor(
+    private readonly carsService: CarsService,
+    private readonly userService: UsersService,
+  ) {}
 
   @ApiOperation({ summary: 'Create new car' })
   @ApiResponse({ status: 200, type: Car })
   @Roles('seller', 'admin')
   @UseGuards(RolesGuard)
   @Post('/create')
-  async createCar(@Body() dto: CreateCarDto, @Req() req: { user: User }) {
-    dto.userId = req.user.id;
-    return this.carsService.create(dto);
+  async createCar(@Body() dto: CreateCarDto, @Req() req: any) {
+    return this.carsService.addSaleCar(dto, req);
   }
 
   @Get()

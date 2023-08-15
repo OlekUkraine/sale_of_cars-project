@@ -4,5 +4,5 @@ export class FindCarDto {
   readonly year: number;
   readonly image: string;
   readonly description: string;
-  readonly price: number;
+  price: string;
 }

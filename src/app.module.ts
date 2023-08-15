@@ -13,6 +13,9 @@ import { MPost } from './posts/posts.model';
 import { FilesModule } from './files/files.module';
 import { CarsModule } from './cars/cars.module';
 import { Car } from './cars/cars.model';
+import { CurrencyModule } from './currency/currency.module';
+import { HttpModule } from '@nestjs/axios';
+import { Currency } from './currency/currency.model';
 
 @Module({
   controllers: [],
@@ -28,7 +31,7 @@ import { Car } from './cars/cars.model';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Role, UserRole, MPost, Car],
+      models: [User, Role, UserRole, MPost, Car, Currency],
       autoLoadModels: true,
       synchronize: true,
     }),
@@ -38,6 +41,7 @@ import { Car } from './cars/cars.model';
     PostsModule,
     FilesModule,
     CarsModule,
+    CurrencyModule,
   ],
 })
 export class AppModule {}

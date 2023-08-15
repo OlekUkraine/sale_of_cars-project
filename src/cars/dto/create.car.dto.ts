@@ -28,5 +28,9 @@ export class CreateCarDto {
 
   @ApiProperty({ description: 'The price of the car' })
   @IsString({ message: 'most be number' })
-  readonly price: number;
+  price: string;
+
+  @ApiProperty({ description: 'Currency most be UAH, USD or EUR' })
+  @IsString({ message: 'most be string' })
+  currency: string;
 }

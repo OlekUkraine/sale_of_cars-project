@@ -17,6 +17,7 @@ import { Role } from '../roles/roles.model';
 import { UserRole } from '../roles/user-roles.model';
 import { CarsModule } from '../cars/cars.module';
 import { AttachUserMiddleware } from './middleware/attach-user.middleware';
+import { CurrencyModule } from '../currency/currency.module';
 
 @Module({
   controllers: [AuthController],
@@ -27,6 +28,7 @@ import { AttachUserMiddleware } from './middleware/attach-user.middleware';
       property: 'user',
       session: false,
     }),
+    forwardRef(() => CurrencyModule),
     forwardRef(() => CarsModule),
     forwardRef(() => RolesModule),
     forwardRef(() => UsersModule),

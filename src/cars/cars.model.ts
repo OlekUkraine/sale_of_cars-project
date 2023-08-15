@@ -9,6 +9,7 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from '../users/users.model';
 import { ICarCreation } from './interfaces/car.interface';
+import { IsString } from 'class-validator';
 
 @Table({ tableName: 'cars' })
 export class Car extends Model<Car, ICarCreation> {
@@ -52,10 +53,14 @@ export class Car extends Model<Car, ICarCreation> {
 
   @ApiProperty({ description: 'Image of the car' })
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     allowNull: false,
   })
-  price: number;
+  price: string;
+
+  @ApiProperty({ description: 'Currency most be UAH, USD or EUR' })
+  @Column({ type: DataType.STRING })
+  readonly currency: string;
 
   @ForeignKey(() => User)
   @Column({ type: DataType.INTEGER })

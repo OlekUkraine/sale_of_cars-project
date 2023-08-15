@@ -9,7 +9,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { RoleCreationAttrs } from './interfaces/role.interface';
 import { User } from '../users/users.model';
 import { UserRole } from './user-roles.model';
-import { ERoles } from './enums/roles.enum';
+import { ERoles } from '../enums/roles.enum';
 import { IsEnum } from 'class-validator';
 
 @Table({ tableName: 'roles' })

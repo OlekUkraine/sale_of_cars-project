@@ -2,15 +2,13 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { InjectModel } from '@nestjs/sequelize';
 import { Role } from './roles.model';
-import { ERoles } from './enums/roles.enum';
+import { ERoles } from '../enums/roles.enum';
 
 @Injectable()
 export class RolesService {
   constructor(@InjectModel(Role) private roleRepository: typeof Role) {}
   async createRole(dto: CreateRoleDto): Promise<Role> {
     const isNotBadRole = Object.values(ERoles).includes(dto.value);
-    console.log('isNotBadRole', isNotBadRole);
-    console.log('typeof ERoles', ERoles);
 
     if (!isNotBadRole) {
       throw new HttpException(
