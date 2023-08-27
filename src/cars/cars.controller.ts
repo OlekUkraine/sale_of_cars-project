@@ -21,7 +21,6 @@ import {
 import { Roles } from '../auth/decorators/roles-auth.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Car } from './cars.model';
-import { UsersService } from '../users/users.service';
 import {
   ApiPaginatedResponse,
   PaginatedDto,
@@ -55,7 +54,6 @@ export class CarsController {
 
   @ApiOperation({ summary: 'Choose a car' })
   @ApiResponse({ status: 200, type: FindCarDto })
-  // @ApiPaginatedResponse('entities', FindCarDto)
   @Get('/buy/:carId')
   async getCarInfo(@Param('carId') carId: number): Promise<FindCarDto> {
     return this.carsService.allInformationAboutCar(carId);

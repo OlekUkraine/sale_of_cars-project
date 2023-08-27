@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -27,7 +28,6 @@ import {
 } from '../common/pagination/response';
 import { PublicQueryDto } from '../common/query/query.dto';
 import { PublicUserDto } from './dto/public.user.dto';
-import { ERoles } from '../enums/roles.enum';
 
 @ApiTags('users')
 @ApiExtraModels(PublicUserDto, PaginatedDto)
@@ -60,7 +60,16 @@ export class UsersController {
   @UseGuards(RolesGuard)
   @Post('/add_role')
   async addRole(@Body() dto: AddRoleDto): Promise<AddRoleDto> {
+    console.log(dto);
     return this.userService.addRole(dto);
+  }
+
+  @ApiOperation({ summary: 'Buy premium' })
+  @ApiResponse({ status: 200, type: AddRoleDto })
+  @Post('/premium')
+  async addPremiumStatus(@Req() req: any) {
+    console.log(req);
+    return this.userService.premiumStatus(req.data);
   }
 
   @ApiOperation({ summary: 'Banned users' })

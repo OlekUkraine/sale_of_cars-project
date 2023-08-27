@@ -15,7 +15,7 @@ export class CurrencyService {
     private httpService: HttpService,
   ) {}
 
-  async transferredAmount(dto: TransferredAmountDto) {
+  async transferredAmount(dto: TransferredAmountDto): Promise<string> {
     const currentExchangeRate = await this.getAndCreateExchangeRate();
     const filteredCurrency = currentExchangeRate.filter(
       (value: CurrencyDto) => value.ccy === dto.currency,
@@ -28,7 +28,7 @@ export class CurrencyService {
     return dto.price;
   }
 
-  async getCurrencySale(currency: string) {
+  async getCurrencySale(currency: string): Promise<string> {
     const currentExchangeRate = await this.currencyRepository.findOne({
       where: { ccy: currency },
     });
@@ -40,15 +40,20 @@ export class CurrencyService {
     const { data } = await this.getExchangeRate();
 
     if (data) {
-      Currency.destroy({
+      await Currency.destroy({
         where: {},
       }).then((rowsDeleted) => {
         console.log(`Deleted ${rowsDeleted} rows.`);
       });
 
-      await data.forEach((value: CurrencyDto) =>
-        this.currencyRepository.create({ ...value }),
-      );
+      await Promise.all([
+        data.map(
+          async (value: CurrencyDto): Promise<Currency> =>
+            await this.currencyRepository.create({ ...value }),
+        ),
+      ]);
+
+      console.log('currency >>>>>>>>>>>>>>>>>>>>>>..', data);
 
       return data;
     }

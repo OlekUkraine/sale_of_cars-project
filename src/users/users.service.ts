@@ -99,12 +99,20 @@ export class UsersService {
     const user = await this.userRepository.findByPk(dto.userId);
     const role = await this.roleService.getRoleByValue(dto.value);
 
+    console.log('user, role ....>>>>', user, role);
+
     if (role && user) {
       await user.$add('role', role.id);
       return dto;
     }
 
     throw new HttpException('User or role not found', HttpStatus.NOT_FOUND);
+  }
+
+  async premiumStatus(req: any) {
+    const user = req.user;
+    console.log(user.id);
+    return user;
   }
 
   async ban(dto: BanUserDto): Promise<User> {

@@ -3,7 +3,6 @@ import { CreateCarDto } from './dto/create.car.dto';
 import { Car } from './cars.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'sequelize-typescript';
-import { AuthService } from '../auth/auth.service';
 import { CurrencyService } from '../currency/currency.service';
 import { ECurrency } from '../enums/currency.enum';
 import { Op } from 'sequelize';
@@ -18,7 +17,6 @@ import { UsersService } from '../users/users.service';
 export class CarsService {
   constructor(
     @InjectRepository(Car) private readonly carRepository: Repository<Car>,
-    private readonly authService: AuthService,
     private readonly currencyService: CurrencyService,
     private readonly paginationService: PaginationService,
     private readonly usersService: UsersService,
@@ -60,10 +58,8 @@ export class CarsService {
         order: [[options.sortField, options.sortOrder]],
       });
 
-      const carsList = await this.paginationService.paginate(
-        foundCars,
-        options,
-      );
+      const carsList: PaginatedDto<Car> =
+        await this.paginationService.paginate<Car>(foundCars, options);
 
       if ('UAH' !== currency) {
         const ue = await this.currencyService.getCurrencySale(currency);
@@ -80,13 +76,13 @@ export class CarsService {
     }
   }
 
-  async update(dto: ICarPublicInfo) {
+  async update(dto: ICarPublicInfo): Promise<Car> {
     const carForUpdate = await this.getOne(dto.id);
     await carForUpdate.update({ ...dto });
     return carForUpdate;
   }
 
-  async delete(carId: number) {
+  async delete(carId: number): Promise<void> {
     const carToDelete = await this.getOne(carId);
     return carToDelete.destroy();
   }
@@ -106,7 +102,7 @@ export class CarsService {
     }
   }
 
-  async getOne(carId: number) {
+  async getOne(carId: number): Promise<Car> {
     return await this.carRepository.findByPk(carId);
   }
 

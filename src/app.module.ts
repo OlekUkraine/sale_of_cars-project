@@ -12,7 +12,6 @@ import { FilesModule } from './files/files.module';
 import { CarsModule } from './cars/cars.module';
 import { Car } from './cars/cars.model';
 import { CurrencyModule } from './currency/currency.module';
-import { HttpModule } from '@nestjs/axios';
 import { Currency } from './currency/currency.model';
 import { PaginationModule } from './pagination/pagination.module';
 
