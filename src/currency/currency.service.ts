@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { API_PB } from '../configs/urls';
 import { firstValueFrom } from 'rxjs';
 import { ECurrency } from '../enums/currency.enum';
 import { InjectModel } from '@nestjs/sequelize';
 import { Currency } from './currency.model';
 import { CurrencyDto } from './dto/currency.dto';
 import { TransferredAmountDto } from './dto/transferred.amount.dto';
+import * as process from 'process';
 
 @Injectable()
 export class CurrencyService {
@@ -53,13 +53,11 @@ export class CurrencyService {
         ),
       ]);
 
-      console.log('currency >>>>>>>>>>>>>>>>>>>>>>..', data);
-
       return data;
     }
   }
 
   private async getExchangeRate(): Promise<any> {
-    return await firstValueFrom(this.httpService.get(API_PB));
+    return await firstValueFrom(this.httpService.get(process.env.API_PB));
   }
 }

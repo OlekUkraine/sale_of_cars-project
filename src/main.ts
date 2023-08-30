@@ -7,7 +7,6 @@ const environment = process.env.NODE_ENV ?? '';
 dotenv.config({ path: `environments/${environment}.env` });
 
 async function bootstrap() {
-  const PORT = process.env.PORT || 5000;
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
@@ -19,8 +18,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/api/docs', app, document);
 
-  await app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
+  await app.listen(process.env.PORT, () => {
+    console.log(`Server started on port ${process.env.PORT}`);
   });
 }
 bootstrap();
