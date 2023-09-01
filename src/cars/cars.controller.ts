@@ -44,6 +44,7 @@ export class CarsController {
     return this.carsService.addCarForSale(dto, req);
   }
 
+  @ApiOperation({ summary: 'Get all cars' })
   @ApiPaginatedResponse('entities', CreateCarDto)
   @Get('/list')
   async getCarsList(

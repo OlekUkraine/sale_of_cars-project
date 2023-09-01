@@ -3,11 +3,10 @@ import { UsersModule } from './users/users.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { RolesModule } from './roles/roles.module';
 import { AuthModule } from './auth/auth.module';
-import { FilesModule } from './files/files.module';
 import { CarsModule } from './cars/cars.module';
 import { CurrencyModule } from './currency/currency.module';
 import { PaginationModule } from './pagination/pagination.module';
-import { SequelizeConfiguration } from "./configs/database/sequelize-configuration";
+import { SequelizeConfiguration } from './configs/database/sequelize-configuration';
 
 @Module({
   controllers: [],
@@ -17,7 +16,6 @@ import { SequelizeConfiguration } from "./configs/database/sequelize-configurati
     UsersModule,
     RolesModule,
     AuthModule,
-    FilesModule,
     CarsModule,
     CurrencyModule,
     PaginationModule,
